@@ -22,14 +22,17 @@ export const RepositoryList = () => {
     refetch({ query: [baseQuery, searchValue].filter(Boolean).join(' ') });
   };
 
+  const list = data?.search.nodes || [];
+
   const getList = () => {
     if (loading) return <>Loading...</>;
     if (error) return <>{`Error! ${error.message}`}</>;
-    return <RepositoryTable list={data?.search.nodes || []} />;
+    if (!list.length) return <Typography>No data to display.</Typography>;
+    return <RepositoryTable list={list} />;
   };
 
   return <>
-    <Search onSearch={onSearch} />
+    <Search onSearch={onSearch} disabled={loading} />
     {getList()}
     <div style={{ marginTop: 30 }}>
       <Typography variant="caption">
